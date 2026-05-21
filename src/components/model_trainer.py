@@ -12,7 +12,13 @@ from sklearn.ensemble import (
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import r2_score
 from sklearn.tree import DecisionTreeRegressor
-from xgboost import XGBRegressor
+try:
+    from xgboost import XGBRegressor
+    xgb_available = True
+except ImportError:
+    XGBRegressor = None
+    xgb_available = False
+
 from sklearn.neighbors import KNeighborsRegressor
 
 from src.exception import CustomException
@@ -42,12 +48,49 @@ class ModelTrainer:
                 "Gradient Boosting": GradientBoostingRegressor(),
                 "Linear Regression": LinearRegression(),
                 "K-Neighbors Regressor": KNeighborsRegressor(),
-                "XGBRegressor": XGBRegressor(),
                 "AdaBoost Regressor": AdaBoostRegressor(),
                 "CatBoosting Regressor": CatBoostRegressor(verbose=False)
             }
+            if xgb_available:
+                models["XGBRegressor"] = XGBRegressor()
 
-            model_report: dict = evaluate_model(X_train=X_train, y_train=y_train, X_test=X_test, y_test=y_test, models=models) 
+            params = {
+                "Decision Tree": {  
+                    'criterion': ['squared_error', 'friedman_mse', 'absolute_error', 'poisson']
+                },                      
+
+                "Random Forest": {
+
+                    'n_estimators': [8, 16, 32, 64, 128, 256]
+                },
+                "Gradient Boosting": {
+
+                    'learning_rate': [.1, .01, .05, .001],
+                    'subsample': [0.6, 0.7, 0.75, 0.8, 0.85, 0.9],
+                    'n_estimators': [8, 16, 32, 64, 128, 256]
+                },
+                "Linear Regression": {},
+                "K-Neighbors Regressor": {
+                    'n_neighbors': [5, 7, 9, 11],
+                  #  'weights': ['uniform', 'distance']
+                },
+                "AdaBoost Regressor": {
+                    'learning_rate': [.1, .01, .05, .001],
+                    'n_estimators': [8, 16, 32, 64, 128, 256]
+                },
+                "CatBoosting Regressor": {
+                    'learning_rate': [.1, .01, .05, .001],
+                    'depth': [6, 8, 10],
+                    'iterations': [30, 50, 100]
+                }
+            }
+            if xgb_available:
+                params["XGBRegressor"] = {
+                    'learning_rate': [.1, .01, .05, .001],
+                    'n_estimators': [8, 16, 32, 64, 128, 256]
+                }
+
+            model_report: dict = evaluate_model(X_train=X_train, y_train=y_train, X_test=X_test, y_test=y_test, models=models, param=params) 
 
            
 
