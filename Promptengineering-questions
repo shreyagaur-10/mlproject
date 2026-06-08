@@ -1,0 +1,282 @@
+
+
+1️⃣ What is prompt debugging?
+
+Answer:
+Prompt debugging is the process of iteratively improving prompts to make LLM outputs:
+
+More accurate
+
+More consistent
+
+Machine-readable
+
+Safe for production use
+
+
+It treats prompts like code, not text.
+
+
+---
+
+2️⃣ What is Chain-of-Thought prompting?
+
+Answer:
+Chain-of-thought prompting encourages the model to reason step by step internally before producing an answer, which improves performance on:
+
+Logical reasoning
+
+Math problems
+
+Multi-step tasks
+
+
+
+---
+
+3️⃣ Should Chain-of-Thought be shown to users?
+
+Answer:
+No.
+Best practice is to hide chain-of-thought and only return the final answer.
+
+This prevents:
+
+Information leakage
+
+Oververbosity
+
+Security issues
+
+
+Instead, instruct the model to reason internally.
+
+
+---
+
+4️⃣ How do you control model behavior?
+
+Answer:
+By using constraints, such as:
+
+Output format (JSON only)
+
+Fixed schema
+
+Allowed values
+
+Length limits
+
+No explanations
+
+
+Clear constraints reduce hallucinations and formatting errors.
+
+
+---
+
+5️⃣ What are output schemas and why are they important?
+
+Answer:
+An output schema defines the exact structure of the model’s response.
+
+They are important because they:
+
+Make outputs predictable
+
+Enable programmatic validation
+
+Allow safe API integration
+
+Reduce downstream errors
+
+
+
+---
+
+6️⃣ How do you force strict JSON output from an LLM?
+
+Answer:
+By:
+
+1. Explicitly stating “Return ONLY valid JSON”
+
+
+2. Forbidding extra text or markdown
+
+
+3. Providing a strict schema
+
+
+4. Defining fallback values (e.g., null)
+
+
+5. Validating output programmatically
+
+
+
+
+---
+
+7️⃣ Why is validation necessary even with good prompts?
+
+Answer:
+Because LLMs are probabilistic, not deterministic.
+
+Even a perfect prompt can fail.
+Validation ensures:
+
+Invalid JSON is rejected
+
+Schema violations are caught
+
+The system remains stable
+
+
+
+---
+
+8️⃣ How do you validate LLM output?
+
+Answer:
+By:
+
+Parsing the output as JSON
+
+Checking required keys
+
+Validating allowed values
+
+Verifying data types
+
+
+For larger systems, JSON Schema validation is used.
+
+
+---
+
+9️⃣ What happens if the model returns invalid output?
+
+Answer:
+The system should:
+
+1. Reject the output
+
+
+2. Retry the request (with limits)
+
+
+3. Repair or fallback if retries fail
+
+
+
+This is known as the retry-validation loop.
+
+
+---
+
+🔁 Retry Pattern (Explain in Interview)
+
+LLM Output → Validate
+   ❌ Invalid → Retry
+   ✅ Valid → Accept
+
+
+---
+
+🔟 What is the difference between prompt engineering and prompt debugging?
+
+Answer:
+
+Prompt Engineering	Prompt Debugging
+
+Writing prompts	Fixing broken prompts
+One-time	Iterative
+Focus on quality	Focus on reliability
+Manual	Systematic
+
+
+Prompt debugging is production-level skill.
+
+
+---
+
+1️⃣1️⃣ How is prompt debugging similar to software engineering?
+
+Answer:
+Prompts act like:
+
+Functions
+
+APIs
+
+Contracts
+
+
+Validation acts like:
+
+Type checking
+
+Input validation
+
+Error handling
+
+
+If output breaks → prompt is buggy.
+
+
+---
+
+1️⃣2️⃣ What are common mistakes in prompt debugging?
+
+Answer:
+
+Vague constraints
+
+Allowing extra text
+
+Not validating output
+
+Trusting the model blindly
+
+Exposing chain-of-thought
+
+
+
+---
+
+1️⃣3️⃣ How would you explain prompt debugging to a non-AI engineer?
+
+Answer:
+“LLMs are powerful but unpredictable.
+Prompt debugging adds rules and checks, just like input validation in normal software, to make outputs reliable.”
+
+
+---
+
+1️⃣4️⃣ Where is prompt debugging used in real-world systems?
+
+Answer:
+
+Chatbots
+
+AI APIs
+
+Data extraction pipelines
+
+Autonomous agents
+
+RAG systems
+
+Backend AI services
+
+
+
+---
+
+
+> Prompt debugging turns LLMs from demos into production systems.
+
+
+
+
